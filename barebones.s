@@ -76,15 +76,11 @@ enable_rendering:
   sta $2001
 
 ;///////// Test Code \\\\\\\\\\\\\
-  ldx #$00
-@loop:
-  inx
-  cpx #10
-  bne @loop
+  
 ;////////////////\\\\\\\\\\\\\\\\
 
 forever:
-
+  jsr read_controller
   jmp forever
 
 nmi:
@@ -100,7 +96,26 @@ palettes:
 .byte $0f, $00, $00, $00
 
 ; Sprite Palette
-.byte $2c, $20, $00, $00
+.byte $0f, $20, $00, $00
 .byte $0f, $00, $00, $00
 .byte $0f, $00, $00, $00
 .byte $0f, $00, $00, $00
+
+read_controller:
+  ; Initialize the output memory
+  lda #1
+  sta $20
+
+  ; Send the latch pulse down to the 4021
+  sta $4016
+  lda #0
+  sta $4016
+
+  ; Read the buttons from the data line
+@loop:
+  lda $4016
+  lsr a
+  rol $20
+  bcc @loop
+  ldx $20
+  rts
