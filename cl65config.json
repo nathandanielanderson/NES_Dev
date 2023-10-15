@@ -1,0 +1,5 @@
+{
+  "executable": "/opt/homebrew/Cellar/cc65/2.19/bin/cl65",
+  "input": "barebones.s",
+  "params": "--verbose --target nes -o barebones.nes"
+}
