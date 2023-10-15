@@ -1,38 +1,32 @@
-;;; Size of PRG in units of 16 KiB.
-prg_npage = 1
-;;; Size of CHR in units of 8 KiB.
-chr_npage = 1
-;;; INES mapper number.
-mapper = 0
-;;; Mirroring (0 = horizontal, 1 = vertical)
-mirroring = 1
+.segment "HEADER"
+  ; .byte "NES", $1A      ; iNES header identifier
+  .byte $4e, $45, $53, $1a
+  .byte 2                 ; 2x 16KB PRG code
+  .byte 1                 ; 1x 8KB CHR data
+  .byte $01, $00          ; mapper 0, vertical mirroring
 
-.segment "INES"
-        .byte $4e, $45, $53, $1a
-        .byte prg_npage
-        .byte chr_npage
-        .byte ((mapper & $0f) << 4) | (mirroring & 1)
-        .byte mapper & $f0
+.segment "VECTORS"
+  ;; When an NMI happens (once per frame if enabled) the label nmi:
+  .addr nmi
+  ;; When the processor first truns on or is reset, it will jumpt to the label reset:
+  .addr reset
+  ;; External interrupt IRQ (unused)
+  .addr 0
 
-SEGMENTS {
-    ZEROPAGE: load = ZP, type = zp;
-    BSS:    load = RAM, type = bss;
-    INES:   load = HEADER, type = ro, align = $10;
-    CODE:   load = PRG0, type = ro;
-    VECTOR: load = PRG0, type = ro, start = $BFFA;
-    CHR0a:  load = CHR0a, type = ro;
-    CHR0b:  load = CHR0b, type = ro;
-}
+; "nes" linker config requires a STARTUP section, even if it's empty
+.segment "STARTUP"
 
-MEMORY {
-    ZP:     start = $0000, size = $0100, type = rw;
-    RAM:    start = $0300, size = $0400, type = rw;
-    HEADER: start = $0000, size = $0010, type = rw;
-            file = %O, fill = yes;
-    PRG0:   start = $8000, size = $4000, type = ro;
-            file = %O, fill = yes;
-    CHR0a:  start = $0000, size = $1000, type = ro;
-            file = %O, fill = yes;
-    CHR0b:  start = $1000, size = $1000, type = ro;
-            file = %O, fill = yes;
-}
+; Main code segment for the program
+.segment "CODE"
+
+reset:
+  sei       ; disable IRQs
+  cld       ; disable decimal mode
+  ldx #$40
+  stx $4017 ; disable APU fram IRQ
+  ldx #$ff  ; Set up stack
+  txs       ; .
+  inx       ; now X = 0
+  stx $2000 ; disable NMI
+  stx $2001 ; disable rendering
+  stx $4010 ; disable DMC IRQs
