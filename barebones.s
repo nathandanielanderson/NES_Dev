@@ -77,20 +77,10 @@ enable_rendering:
 
 ;///////// Test Code \\\\\\\\\\\\\
   ldx #$00
+@loop:
   inx
-  inx
-  inx
-  inx
-  inx
-  txa
-  tay
-  dey
-  dey
-  dey
-  dey
-  dey
-
-
+  cpx #10
+  bne @loop
 ;////////////////\\\\\\\\\\\\\\\\
 
 forever:
@@ -110,7 +100,7 @@ palettes:
 .byte $0f, $00, $00, $00
 
 ; Sprite Palette
-.byte $0f, $20, $00, $00
+.byte $2c, $20, $00, $00
 .byte $0f, $00, $00, $00
 .byte $0f, $00, $00, $00
 .byte $0f, $00, $00, $00
