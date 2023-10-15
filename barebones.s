@@ -75,6 +75,24 @@ enable_rendering:
   lda #%00010000  ; Enable Sprites
   sta $2001
 
+;///////// Test Code \\\\\\\\\\\\\
+  ldx #$00
+  inx
+  inx
+  inx
+  inx
+  inx
+  txa
+  tay
+  dey
+  dey
+  dey
+  dey
+  dey
+
+
+;////////////////\\\\\\\\\\\\\\\\
+
 forever:
 
   jmp forever
