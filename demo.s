@@ -40,12 +40,12 @@ clear_memory:
   lda #$00
   sta $0000, x
   sta $0100, x
-  sta $0200, x
-  sta $0300, x
-  sta $0400, x
-  sta $0500, x
-  sta $0600, x
-  sta $0700, x
+  sta $0200, x    ; [Address], x :
+  sta $0300, x    ; X-Indexed Absolute
+  sta $0500, x    ; adds X register to address
+  sta $0600, x    ; so incrementing X until it 
+  sta $0400, x    ; flips resulting in #$00 being
+  sta $0700, x    ; loaded from $0000 thru $07FF
   inx
   bne clear_memory
 
