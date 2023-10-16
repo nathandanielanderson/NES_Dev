@@ -81,6 +81,9 @@ enable_rendering:
 
 forever:
   jsr read_controller
+  lda $20
+  cmp #128
+  beq button_a_pressed
   jmp forever
 
 nmi:
@@ -104,7 +107,7 @@ palettes:
 read_controller:
   ; Initialize the output memory
   lda #1
-  sta $20
+  sta $20 
 
   ; Send the latch pulse down to the 4021
   sta $4016
@@ -119,3 +122,7 @@ read_controller:
   bcc @loop
   ldx $20
   rts
+
+button_a_pressed:
+ldy #$ff  ; set Y to $FF when 'A' pressed
+rts
