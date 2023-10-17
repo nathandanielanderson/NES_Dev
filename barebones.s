@@ -76,15 +76,21 @@ enable_rendering:
   sta $2001
 
 ;///////// Test Code \\\\\\\\\\\\\
-  
+  lda #$00
+  sta $01
+  ldy #0
 ;////////////////\\\\\\\\\\\\\\\\
 
 forever:
   jsr read_controller
-  lda $20
-  cmp #128
-  beq button_a_pressed
+  lda #%10000000
+  and $20  ; Is A-Button pressed?
+  cmp #%10000000
+  bne forever
+  jsr button_a_pressed
+
   jmp forever
+
 
 nmi:
 ldx #$00    ; Set SPR-RAM address to 0
@@ -124,5 +130,5 @@ read_controller:
   rts
 
 button_a_pressed:
-ldy #$ff  ; set Y to $FF when 'A' pressed
-rts
+  iny
+  rts
