@@ -86,18 +86,20 @@ enable_rendering:
 
 
   ; Controller port adresses
-  JOYPAD = $4016
+  JOYPAD1 = $4016
+  JOYPAD2 = $4017
 
-  ;                                 0     0     0     0     0     0     0     1
+  ;                                 7     6     5     4     3     2     1     0  <<
   ; Button masks:                   A     B    Sel   Str    Up   Dwn   Lft   Rt
-  BUTTON_A      = 1 << 7        ;   1     0     0     0     0     0     0     0
-  BUTTON_B      = 1 << 6        ;   0     1     0     0     0     0     0     0
-  BUTTON_SELECT = 1 << 5        ;   0     0     1     0     0     0     0     0
-  BUTTON_START  = 1 << 4        ;   0     0     0     1     0     0     0     0
-  BUTTON_UP     = 1 << 3        ;   0     0     0     0     1     0     0     0
-  BUTTON_DOWN   = 1 << 2        ;   0     0     0     0     0     1     0     0
-  BUTTON_LEFT   = 1 << 1        ;   0     0     0     0     0     0     1     0
-  BUTTON_RIGHT  = 1 << 0        ;   0     0     0     0     0     0     0     1
+  ;                                 0     0     0     0     0     0     0     1
+  BUTTON_A      = 1 << 7 
+  BUTTON_B      = 1 << 6      
+  BUTTON_SELECT = 1 << 5       
+  BUTTON_START  = 1 << 4  
+  BUTTON_UP     = 1 << 3    
+  BUTTON_DOWN   = 1 << 2     
+  BUTTON_LEFT   = 1 << 1     
+  BUTTON_RIGHT  = 1 << 0   
 
 ; Joypad State Controller
 .scope Joypad
