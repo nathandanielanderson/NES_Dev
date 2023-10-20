@@ -112,7 +112,19 @@ enable_rendering:
     jsr read_controller
     rts
   .endproc
-      
+  
+  .proc read_joypad1
+    lda down
+    tay
+    lda #1
+    sta JOYPAD1
+    sta down
+    lsr
+    sta JOYPAD1
+    @loop:
+    lda JOYPAD1
+    bcc @loop
+
   .endscope
 
 ;////////////////\\\\\\\\\\\\\\\
