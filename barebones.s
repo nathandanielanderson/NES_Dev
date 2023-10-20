@@ -84,23 +84,34 @@ enable_rendering:
 
 ;/////// JOYPAD LOGIC \\\\\\\\\
 
-.scope Joypad
 
   ; Controller port adresses
   JOYPAD = $4016
 
-  ;               0    1    0    1     0     1     0     1
-  ; Button masks: A    B   Sel  Str    Up   Dwn   Lft   Rt
-  BUTTON_A = 1 << 7   
-  BUTTON_B      = 1 << 6
-  BUTTON_SELECT      = 1 << 5
-  BUTTON_START            = 1 << 4
-  BUTTON_UP                     = 1 << 3
-  BUTTON_DOWN                         = 1 << 2
-  BUTTON_LEFT                               = 1 << 1
-  BUTTON_RIGHT                                    = 1 << 0
+  ;                                 0     0     0     0     0     0     0     1
+  ; Button masks:                   A     B    Sel   Str    Up   Dwn   Lft   Rt
+  BUTTON_A      = 1 << 7        ;   1     0     0     0     0     0     0     0
+  BUTTON_B      = 1 << 6        ;   0     1     0     0     0     0     0     0
+  BUTTON_SELECT = 1 << 5        ;   0     0     1     0     0     0     0     0
+  BUTTON_START  = 1 << 4        ;   0     0     0     1     0     0     0     0
+  BUTTON_UP     = 1 << 3        ;   0     0     0     0     1     0     0     0
+  BUTTON_DOWN   = 1 << 2        ;   0     0     0     0     0     1     0     0
+  BUTTON_LEFT   = 1 << 1        ;   0     0     0     0     0     0     1     0
+  BUTTON_RIGHT  = 1 << 0        ;   0     0     0     0     0     0     0     1
+
+; Joypad State Controller
+.scope Joypad
+
+  down      = $21    ; Button "down" bitmask: 1 = \[DOWN]/, 0 = /[UP]\
+  pressed   = $22    ; Button "pressed" bitmask: 1 = Pressed this frame.
+  downTiles = $600   ; Holds tile value for the controller state in the BG
   
-.endscope
+  .proc update
+    jsr read_controller
+    rts
+  .endproc
+      
+  .endscope
 
 ;////////////////\\\\\\\\\\\\\\\
 forever:
