@@ -88,6 +88,10 @@ enable_rendering:
   ; Controller port adresses
   JOYPAD1 = $4016
   JOYPAD2 = $4017
+  ; Joypad State Controller
+  down      = $21    ; Button "down" bitmask: 1 = \[DOWN]/, 0 = /[UP]\
+  pressed   = $22    ; Button "pressed" bitmask: 1 = Pressed this frame.
+  downTiles = $600   ; Holds tile value for the controller state in the BG
 
   ;                                 7     6     5     4     3     2     1     0  <<
   ; Button masks:                   A     B    Sel   Str    Up   Dwn   Lft   Rt
@@ -101,41 +105,10 @@ enable_rendering:
   BUTTON_LEFT   = 1 << 1     
   BUTTON_RIGHT  = 1 << 0   
 
-; Joypad State Controller
-.scope Joypad
-
-  down      = $21    ; Button "down" bitmask: 1 = \[DOWN]/, 0 = /[UP]\
-  pressed   = $22    ; Button "pressed" bitmask: 1 = Pressed this frame.
-  downTiles = $600   ; Holds tile value for the controller state in the BG
-  
-  .proc update
-    jsr read_controller
-    rts
-  .endproc
-  
-  .proc read_joypad1
-    lda down
-    tay
-    lda #1
-    sta JOYPAD1
-    sta down
-    lsr
-    sta JOYPAD1
-    @loop:
-    lda JOYPAD1
-    bcc @loop
-
-  .endscope
-
 ;////////////////\\\\\\\\\\\\\\\
+
 forever:
   jsr read_controller
-  lda #%10000000
-  and $20  ; Is A-Button pressed?
-  cmp #%10000000
-  bne forever
-  jsr button_a_pressed
-
   jmp forever
 
 
