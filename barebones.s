@@ -75,13 +75,6 @@ enable_rendering:
   lda #%00010000  ; Enable Sprites
   sta $2001
 
-;///////// Test Code \\\\\\\\\\\\\
-  lda #$00
-  sta $01
-  ldy #0
-;////////////////\\\\\\\\\\\\\\\\
-
-
 ;/////// JOYPAD LOGIC \\\\\\\\\
 
 
